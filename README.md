@@ -18,7 +18,7 @@ AI coding sessions are great for development, but hard to share. Screen recordin
 
 ![Demo](https://raw.githubusercontent.com/es617/claude-replay/main/docs/demo.gif)
 
-**[Try it online](https://es617.github.io/claude-replay/)** · **[Live demo](https://es617.github.io/claude-replay/demo-redaction.html)**
+**[Try it online](https://es617.dev/claude-replay/)** · **[Live demo](https://es617.dev/claude-replay/demo-redaction.html)**
 
 Claude Code, Cursor, Codex CLI, Gemini CLI, and OpenCode store conversation transcripts on disk. **claude-replay** auto-detects the format and converts them into visual replays suitable for blog posts, demos, and documentation.
 
@@ -226,7 +226,7 @@ The extracted JSONL can be fed back into `claude-replay` to regenerate with diff
 | `--redact "text=repl"` | Replace all occurrences of text with custom replacement (repeatable) |
 | `--title TEXT` | Page title (default: derived from input path) |
 | `--description TEXT` | Meta description for link previews (default: `Interactive AI session replay`) |
-| `--og-image URL` | OG image URL for link previews (default: [hosted default](https://es617.github.io/claude-replay/og.png)). A default image is always included; to use your own, host it and pass the URL. |
+| `--og-image URL` | OG image URL for link previews (default: [hosted default](https://es617.dev/claude-replay/og.png)). A default image is always included; to use your own, host it and pass the URL. |
 | `--user-label NAME` | Label for user messages (default: `User`) |
 | `--assistant-label NAME` | Label for assistant messages (default: auto-detected) |
 | `--timing MODE` | Timestamp mode: `auto`, `real`, `paced` (default: `auto`) |
