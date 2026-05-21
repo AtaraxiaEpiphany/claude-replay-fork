@@ -28,7 +28,7 @@
 ## Phase 4: Renderer Serialization
 - [~] Update turnsToJsonData in src/renderer.mjs to serialize subagent data from ToolCall.subagent into the embedded JSON, preserving the existing compression and embedding pipeline <!-- AC-2, TC-2.1 -->
   - [x] Add subagent field serialization to the tool_call block in turnsToJsonData [3cd5cc4]
-  - [ ] Ensure secret redaction applies to subagent tool call input/result strings
+  - [x] Ensure secret redaction applies to subagent tool call input/result strings [3cd5cc4]
 - [ ] Add unit tests for renderer serialization: verify subagent data appears in serialized turns, verify redaction applies <!-- AC-2, TC-4.2 -->
 - [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in task-workflow.md)
 
