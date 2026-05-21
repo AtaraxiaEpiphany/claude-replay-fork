@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 4,
-  "current_task_index": 2,
-  "updated_at": "2026-05-21T16:18:22.866037+00:00",
+  "current_task_index": 3,
+  "updated_at": "2026-05-21T16:19:00.041202+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -256,11 +256,14 @@
         },
         {
           "name": "Update the tool grouping logic in renderTurn to handle Agent tool calls (which contain sub-tool-calls) correctly within the consecutive tool call grouping",
-          "status": "in_progress"
+          "status": "completed",
+          "commit_sha": "8949949",
+          "completed_at": "2026-05-21T16:18:48.237Z"
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 5",
-          "status": "pending"
+          "status": "deferred",
+          "defer_reason": "Deferred: manual task requires human verification"
         }
       ]
     },
