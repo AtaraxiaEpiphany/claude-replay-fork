@@ -1,0 +1,208 @@
+{
+  "track_id": "subagent-tree_20260521",
+  "type": "feature",
+  "status": "new",
+  "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
+  "current_phase_index": 0,
+  "current_task_index": 0,
+  "updated_at": "2026-05-21T14:16:28.056413+00:00",
+  "phases": [
+    {
+      "name": "Phase 1: Exploration & Data Model Extension",
+      "status": "pending",
+      "tasks": [
+        {
+          "name": "[Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data",
+          "status": "pending",
+          "subtasks": [
+            {
+              "name": "Locate a real Claude Code session directory with subagents, or create synthetic fixtures",
+              "status": "pending"
+            },
+            {
+              "name": "Read and document the exact shape of agent-*.meta.json files",
+              "status": "pending"
+            },
+            {
+              "name": "Read and document the exact shape of agent-*.jsonl files (confirm isSidechain, agentId fields)",
+              "status": "pending"
+            },
+            {
+              "name": "Verify the toolUseId linkage between meta.json and main session tool_use blocks",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "name": "Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls",
+          "status": "pending"
+        },
+        {
+          "name": "[Manual] Task: Conductor - User Manual Verification Phase 1",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Phase 2: Subagent Discovery & Parsing",
+      "status": "pending",
+      "tasks": [
+        {
+          "name": "Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files",
+          "status": "pending",
+          "subtasks": [
+            {
+              "name": "Implement discoverSubagents(mainSessionPath) returning array of { agentId, meta, jsonlPath }",
+              "status": "pending"
+            },
+            {
+              "name": "Implement parseSubagentMeta(metaFilePath) returning { agentType, description, toolUseId }",
+              "status": "pending"
+            },
+            {
+              "name": "Implement linkSubagents(turns, subagentData) that attaches parsed subagent tool calls to matching Agent ToolCall blocks",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "name": "Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing",
+          "status": "pending"
+        },
+        {
+          "name": "[Manual] Task: Conductor - User Manual Verification Phase 2",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Phase 3: CLI Integration",
+      "status": "pending",
+      "tasks": [
+        {
+          "name": "Integrate subagent discovery into the CLI build pipeline in bin/claude-replay.mjs so that when a Claude Code session is resolved, subagent files are automatically discovered and parsed",
+          "status": "pending",
+          "subtasks": [
+            {
+              "name": "Add subagent discovery call after parseTranscript in buildReplay function",
+              "status": "pending"
+            },
+            {
+              "name": "Only invoke subagent discovery for Claude Code format sessions",
+              "status": "pending"
+            },
+            {
+              "name": "Pass subagent-enriched turns through existing filterTurns, applyPacedTiming, and render pipeline unchanged",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "name": "Add unit tests for CLI integration: verify subagent data flows through to rendered output, verify no-impact on non-Claude-Code formats",
+          "status": "pending"
+        },
+        {
+          "name": "[Manual] Task: Conductor - User Manual Verification Phase 3",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Phase 4: Renderer Serialization",
+      "status": "pending",
+      "tasks": [
+        {
+          "name": "Update turnsToJsonData in src/renderer.mjs to serialize subagent data from ToolCall.subagent into the embedded JSON, preserving the existing compression and embedding pipeline",
+          "status": "pending",
+          "subtasks": [
+            {
+              "name": "Add subagent field serialization to the tool_call block in turnsToJsonData",
+              "status": "pending"
+            },
+            {
+              "name": "Ensure secret redaction applies to subagent tool call input/result strings",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "name": "Add unit tests for renderer serialization: verify subagent data appears in serialized turns, verify redaction applies",
+          "status": "pending"
+        },
+        {
+          "name": "[Manual] Task: Conductor - User Manual Verification Phase 4",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Phase 5: HTML Player Tree-View Rendering",
+      "status": "pending",
+      "tasks": [
+        {
+          "name": "Add CSS styles for the Agent tree-view in template/player.html: tree node containers, indented child tool blocks, parallel layout for multiple agents",
+          "status": "pending",
+          "subtasks": [
+            {
+              "name": "Add .agent-tree, .agent-node, .agent-children CSS classes with indentation and tree lines",
+              "status": "pending"
+            },
+            {
+              "name": "Add parallel layout styles for side-by-side agent trees when multiple agents appear in same turn",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "name": "Update the renderTurn function in template/player.html to detect Agent tool calls with subagent data and render them as expandable tree nodes instead of standard tool blocks",
+          "status": "pending",
+          "subtasks": [
+            {
+              "name": "Add agent tree rendering: header shows Agent (type/description), children show internal tool calls as indented blocks",
+              "status": "pending"
+            },
+            {
+              "name": "Each internal tool call in the tree should be rendered using existing tool block rendering (formatToolBody)",
+              "status": "pending"
+            },
+            {
+              "name": "Ensure Agent tool calls without subagent data fall back to standard tool block rendering",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "name": "Update the tool grouping logic in renderTurn to handle Agent tool calls (which contain sub-tool-calls) correctly within the consecutive tool call grouping",
+          "status": "pending"
+        },
+        {
+          "name": "[Manual] Task: Conductor - User Manual Verification Phase 5",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Phase 6: Playback Engine Integration & Final Testing",
+      "status": "pending",
+      "tasks": [
+        {
+          "name": "Update the animateTurn and block reveal logic in template/player.html to handle Agent tree blocks: when an Agent tree node is revealed, all its child tool blocks should be revealed as a single animation unit",
+          "status": "pending"
+        },
+        {
+          "name": "Add comprehensive unit tests for the full pipeline: synthetic Claude Code session with subagents -> parse -> serialize -> verify HTML output contains tree structure",
+          "status": "pending"
+        },
+        {
+          "name": "Run full test suite (unit + E2E) and verify all existing tests pass with no regressions",
+          "status": "pending"
+        },
+        {
+          "name": "[Manual] Task: Conductor - User Manual Verification Phase 6",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "execution_mode": "continuous"
+}
