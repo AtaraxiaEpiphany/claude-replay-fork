@@ -1,8 +1,1 @@
-{
-  "status": "success",
-  "commit_sha": "cbc076a",
-  "files_changed": ["src/formats/shared.mjs"],
-  "summary": "Extended ToolCall type with optional subagent field for nested internal tool calls",
-  "tc_coverage": null,
-  "spec_deviation": null
-}
+{"status": "SUCCESS", "commit_sha": "", "files_changed": "exploration.md", "summary": "Located real Claude Code sessions with subagents at ~/.claude/projects/; validated meta.json shape {agentType,description,toolUseId}, subagent JSONL format (isSidechain:true,agentId), and toolUseId linkage to main session Agent tool_use blocks", "phase": 0, "task": 0, "subtask": null, "task_name": "Locate a real Claude Code session directory with subagents, or create synthetic fixtures"}
