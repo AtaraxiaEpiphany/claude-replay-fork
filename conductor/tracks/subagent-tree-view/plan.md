@@ -15,7 +15,7 @@
   - [x] Implement parseSubagentMeta(metaFilePath) returning { agentType, description, toolUseId } [94a2c8f]
   - [x] Implement linkSubagents(turns, subagentData) that attaches parsed subagent tool calls to matching Agent ToolCall blocks [beb5753]
 - [x] Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing <!-- AC-1, AC-4, TC-1.1, TC-1.2, TC-1.3, TC-4.1 --> [dc0cd88]
-- [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in task-workflow.md)
+- [d] [Manual] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in task-workflow.md)
 
 ## Phase 3: CLI Integration
 - [ ] Integrate subagent discovery into the CLI build pipeline in bin/claude-replay.mjs so that when a Claude Code session is resolved, subagent files are automatically discovered and parsed <!-- AC-1, TC-1.1, TC-4.1, TC-4.2 -->
