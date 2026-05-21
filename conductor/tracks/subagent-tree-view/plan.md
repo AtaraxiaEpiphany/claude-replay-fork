@@ -47,4 +47,4 @@
 - [x] Update the animateTurn and block reveal logic in template/player.html to handle Agent tree blocks: when an Agent tree node is revealed, all its child tool blocks should be revealed as a single animation unit <!-- AC-2, TC-2.1 --> [1fb6586]
 - [x] Add comprehensive unit tests for the full pipeline: synthetic Claude Code session with subagents -> parse -> serialize -> verify HTML output contains tree structure <!-- AC-1 through AC-6, TC-1.1, TC-2.1, TC-3.1, TC-4.1, TC-5.1, TC-6.1, TC-6.2 --> [0e10724]
 - [x] Run full test suite (unit + E2E) and verify all existing tests pass with no regressions <!-- AC-6, TC-6.1, TC-6.2 --> [9c92e65]
-- [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 6' (Protocol in task-workflow.md)
+- [d] [Manual] Task: Conductor - User Manual Verification 'Phase 6' (Protocol in task-workflow.md)
