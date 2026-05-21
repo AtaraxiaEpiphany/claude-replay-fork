@@ -13,6 +13,7 @@ import { parseTranscript, filterTurns, detectFormat, applyPacedTiming } from "..
 import { render } from "../src/renderer.mjs";
 import { getTheme, loadThemeFile, listThemes } from "../src/themes.mjs";
 import { extractData } from "../src/extract.mjs";
+import { discoverSubagents, linkSubagents } from "../src/subagents.mjs";
 
 const options = {
   port: { type: "string" },
@@ -378,15 +379,39 @@ if (values.redact) {
 }
 
 /** Parse input files and render to HTML. Can be called repeatedly for --watch. */
-function buildReplay() {
+async function buildReplay() {
   let format = detectFormat(inputFiles[0]);
   let allTurns = [];
   for (const file of inputFiles) {
     const fileTurns = parseTranscript(file);
+    const f = detectFormat(file);
     if (inputFiles.length > 1) {
-      const f = detectFormat(file);
       if (f === "cursor") format = "cursor";
     }
+
+    // Discover and link subagents for Claude Code format sessions
+    if (f === "claude-code" || format === "claude-code") {
+      try {
+        const subagents = await discoverSubagents(file);
+        if (subagents.length > 0) {
+          // Parse all subagent JSONL files
+          const subagentData = await Promise.all(
+            subagents.map(async (subagent) => {
+              const subagentTurns = parseTranscript(subagent.jsonlPath);
+              return {
+                meta: subagent.meta,
+                turns: subagentTurns
+              };
+            })
+          );
+          // Link subagents to the main session turns
+          linkSubagents(fileTurns, subagentData);
+        }
+      } catch (error) {
+        console.warn(`Error processing subagents for ${file}:`, error.message);
+      }
+    }
+
     allTurns.push(...fileTurns);
   }
 
@@ -470,9 +495,9 @@ if (values.serve) {
   let currentTurnCount = 0;
   let buildVersion = 0;
 
-  function rebuild() {
+  async function rebuild() {
     try {
-      const { html, turnCount } = buildReplay();
+      const { html, turnCount } = await buildReplay();
       currentHtml = html;
       currentTurnCount = turnCount;
       buildVersion++;
@@ -548,9 +573,9 @@ if (values.serve) {
     process.exit(1);
   }
 
-  function rebuild() {
+  async function rebuild() {
     try {
-      const { html, turnCount } = buildReplay();
+      const { html, turnCount } = await buildReplay();
       writeFileSync(values.output, html);
       console.error(`[${new Date().toLocaleTimeString()}] Wrote ${values.output} (${turnCount} turns)`);
     } catch (e) {
@@ -569,7 +594,7 @@ if (values.serve) {
   console.error(`Watching ${inputFiles.length} file(s) for changes...`);
 } else {
   // Normal mode: build once and output
-  const { html, turnCount } = buildReplay();
+  const { html, turnCount } = await buildReplay();
 
   if (values.output) {
     writeFileSync(values.output, html);
