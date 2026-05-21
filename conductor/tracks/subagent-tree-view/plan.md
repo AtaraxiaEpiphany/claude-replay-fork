@@ -7,7 +7,7 @@
   - [x] Read and document the exact shape of agent-*.jsonl files (confirm isSidechain, agentId fields) [6aa5c64]
   - [x] Verify the toolUseId linkage between meta.json and main session tool_use blocks [0b1c8b6]
 - [x] Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls <!-- AC-1, TC-1.1, TC-1.2 --> [10e0967]
-- [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in task-workflow.md)
+- [d] [Manual] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in task-workflow.md)
 
 ## Phase 2: Subagent Discovery & Parsing
 - [ ] Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files <!-- AC-1, TC-1.1, TC-1.2, TC-1.3 -->
