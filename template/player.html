@@ -1064,6 +1064,63 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
 }
 .file-sidebar-toggle2:hover { color: var(--text); }
 
+/* Agent tree-view */
+.agent-tree {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 4px 0;
+}
+.agent-tree-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+.agent-tree-header:hover { background: var(--bg-hover); }
+.agent-tree-header .agent-type {
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--bg-hover);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.agent-tree-header .agent-toggle {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-dim);
+  transition: transform 0.15s;
+}
+.agent-tree.collapsed .agent-toggle { transform: rotate(-90deg); }
+.agent-tree.collapsed .agent-children { display: none; }
+.agent-children {
+  padding: 0;
+  margin-left: 12px;
+  border-left: 2px solid var(--border);
+}
+.agent-children > .tool-block-wrap {
+  margin: 4px 8px 4px 8px;
+  padding-left: 8px;
+  border-left: none;
+}
+
+/* Parallel agent layout */
+.agent-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+.agent-group > .agent-tree {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
 </style>
 </head>
 <body>
