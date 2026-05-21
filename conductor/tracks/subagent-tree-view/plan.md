@@ -34,7 +34,7 @@
 
 ## Phase 5: HTML Player Tree-View Rendering
 - [~] Add CSS styles for the Agent tree-view in template/player.html: tree node containers, indented child tool blocks, parallel layout for multiple agents <!-- AC-2, AC-3, TC-2.1, TC-3.1, TC-3.2 -->
-  - [~] Add .agent-tree, .agent-node, .agent-children CSS classes with indentation and tree lines
+  - [x] Add .agent-tree, .agent-node, .agent-children CSS classes with indentation and tree lines [c976e5f]
   - [ ] Add parallel layout styles for side-by-side agent trees when multiple agents appear in same turn
 - [ ] Update the renderTurn function in template/player.html to detect Agent tool calls with subagent data and render them as expandable tree nodes instead of standard tool blocks <!-- AC-2, AC-3, TC-2.1, TC-2.2, TC-3.1 -->
   - [ ] Add agent tree rendering: header shows "Agent (type/description)", children show internal tool calls as indented blocks
