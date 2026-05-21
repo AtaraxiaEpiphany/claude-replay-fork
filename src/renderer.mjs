@@ -82,33 +82,40 @@ function turnsToJsonData(turns, { redact = true, redactRules } = {}) {
   const scrubText = (text) => customRedact(redact ? redactSecrets(text) : text);
   const scrubObj = (obj) => transformStrings(redact ? redactObject(obj) : obj, customRedact);
 
-  return turns.map((turn) => ({
-    index: turn.index,
-    user_text: scrubText(turn.user_text),
-    blocks: turn.blocks.map((b) => {
-      const block = {
-        kind: b.kind,
-        text: scrubText(b.text),
-      };
-      if (b.timestamp) block.timestamp = b.timestamp;
-      if (b.tool_call) {
-        block.tool_call = {
-          name: b.tool_call.name,
-          input: scrubObj(b.tool_call.input),
-          result: scrubText(b.tool_call.result),
+  function serializeTurns(turnsToSerialize) {
+    return turnsToSerialize.map((turn) => ({
+      index: turn.index,
+      user_text: scrubText(turn.user_text),
+      blocks: turn.blocks.map((b) => {
+        const block = {
+          kind: b.kind,
+          text: scrubText(b.text),
         };
-        if (b.tool_call.is_error) {
-          block.tool_call.is_error = true;
+        if (b.timestamp) block.timestamp = b.timestamp;
+        if (b.tool_call) {
+          block.tool_call = {
+            name: b.tool_call.name,
+            input: scrubObj(b.tool_call.input),
+            result: scrubText(b.tool_call.result),
+          };
+          if (b.tool_call.is_error) {
+            block.tool_call.is_error = true;
+          }
+          if (b.tool_call.resultTimestamp) {
+            block.tool_call.resultTimestamp = b.tool_call.resultTimestamp;
+          }
+          if (b.tool_call.subagent) {
+            block.tool_call.subagent = serializeTurns(b.tool_call.subagent);
+          }
         }
-        if (b.tool_call.resultTimestamp) {
-          block.tool_call.resultTimestamp = b.tool_call.resultTimestamp;
-        }
-      }
-      return block;
-    }),
-    timestamp: turn.timestamp,
-    ...(turn.system_events ? { system_events: turn.system_events } : {}),
-  }));
+        return block;
+      }),
+      timestamp: turn.timestamp,
+      ...(turn.system_events ? { system_events: turn.system_events } : {}),
+    }));
+  }
+
+  return serializeTurns(turns);
 }
 
 /**
