@@ -21,7 +21,7 @@
 - [~] Integrate subagent discovery into the CLI build pipeline in bin/claude-replay.mjs so that when a Claude Code session is resolved, subagent files are automatically discovered and parsed <!-- AC-1, TC-1.1, TC-4.1, TC-4.2 -->
   - [x] Add subagent discovery call after parseTranscript in buildReplay function [e299aad]
   - [x] Only invoke subagent discovery for Claude Code format sessions [e299aad]
-  - [ ] Pass subagent-enriched turns through existing filterTurns, applyPacedTiming, and render pipeline unchanged
+  - [x] Pass subagent-enriched turns through existing filterTurns, applyPacedTiming, and render pipeline unchanged [e299aad]
 - [ ] Add unit tests for CLI integration: verify subagent data flows through to rendered output, verify no-impact on non-Claude-Code formats <!-- AC-5, TC-5.1, TC-5.2 -->
 - [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in task-workflow.md)
 

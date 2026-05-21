@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 2,
   "current_task_index": 0,
-  "updated_at": "2026-05-21T16:02:06.253Z",
+  "updated_at": "2026-05-21T16:02:36.028Z",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -146,7 +146,9 @@
             },
             {
               "name": "Pass subagent-enriched turns through existing filterTurns, applyPacedTiming, and render pipeline unchanged",
-              "status": "pending"
+              "status": "completed",
+              "commit_sha": "e299aad",
+              "completed_at": "2026-05-21T16:02:36.027Z"
             }
           ]
         },
@@ -258,5 +260,5 @@
     }
   ],
   "execution_mode": "continuous",
-  "current_subtask_index": 2
+  "current_subtask_index": null
 }
