@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { discoverSubagents, parseSubagentMeta } from '../src/subagents.mjs';
+import { discoverSubagents, parseSubagentMeta, linkSubagents } from '../src/subagents.mjs';
 
 describe('subagent discovery', () => {
   let tempDir;
@@ -189,5 +189,156 @@ describe('parseSubagentMeta', () => {
     await assert.rejects(async () => {
       await parseSubagentMeta(nonExistentPath);
     }, /ENOENT/);
+  });
+});
+
+describe('linkSubagents', () => {
+  const mainTurns = [
+    {
+      index: 0,
+      user_text: "Run exploration",
+      blocks: [
+        {
+          kind: "tool_use",
+          tool_call: {
+            tool_use_id: "call_abc123",
+            name: "Agent",
+            input: {
+              subagent_type: "conductor:explorer",
+              description: "Explore codebase"
+            }
+          }
+        },
+        {
+          kind: "text",
+          text: "I'll explore the codebase for you."
+        }
+      ]
+    },
+    {
+      index: 1,
+      user_text: "Run task",
+      blocks: [
+        {
+          kind: "tool_use",
+          tool_call: {
+            tool_use_id: "call_def456",
+            name: "Agent",
+            input: {
+              subagent_type: "conductor:task-executor",
+              description: "Execute test task"
+            }
+          }
+        }
+      ]
+    },
+    {
+      index: 2,
+      user_text: "Read file",
+      blocks: [
+        {
+          kind: "tool_use",
+          tool_call: {
+            tool_use_id: "call_ghi789",
+            name: "Read",
+            input: {
+              path: "/test/file.txt"
+            }
+          }
+        }
+      ]
+    }
+  ];
+
+  const subagentTurns1 = [
+    {
+      index: 0,
+      user_text: "Explore the codebase",
+      blocks: [
+        { kind: "tool_use", tool_call: { tool_use_id: "call_sub1", name: "Bash", input: { command: "ls" } } }
+      ]
+    }
+  ];
+
+  const subagentTurns2 = [
+    {
+      index: 0,
+      user_text: "Execute the task",
+      blocks: [
+        { kind: "tool_use", tool_call: { tool_use_id: "call_sub2", name: "Write", input: { path: "/test/output.txt" } } }
+      ]
+    }
+  ];
+
+  it("attaches subagent turns to matching tool calls", () => {
+    const subagentData = [
+      {
+        meta: { toolUseId: "call_abc123", agentType: "conductor:explorer", description: "Explore codebase" },
+        turns: subagentTurns1
+      },
+      {
+        meta: { toolUseId: "call_def456", agentType: "conductor:task-executor", description: "Execute test task" },
+        turns: subagentTurns2
+      }
+    ];
+
+    // Deep clone turns to avoid mutating shared fixture
+    const clonedTurns = JSON.parse(JSON.stringify(mainTurns));
+    const result = linkSubagents(clonedTurns, subagentData);
+
+    // Check first agent tool call has subagent
+    assert.equal(result[0].blocks[0].tool_call.subagent, subagentTurns1);
+
+    // Check second agent tool call has subagent
+    assert.equal(result[1].blocks[0].tool_call.subagent, subagentTurns2);
+
+    // Check non-Agent tool call has no subagent
+    assert.equal(result[2].blocks[0].tool_call.subagent, undefined);
+  });
+
+  it("handles subagents with no matching tool calls", () => {
+    const subagentData = [
+      {
+        meta: { toolUseId: "call_nonexistent", agentType: "Explore", description: "Non-existent" },
+        turns: subagentTurns1
+      }
+    ];
+
+    const clonedTurns = JSON.parse(JSON.stringify(mainTurns));
+    const result = linkSubagents(clonedTurns, subagentData);
+
+    // No subagents should be attached
+    assert.equal(result[0].blocks[0].tool_call.subagent, undefined);
+    assert.equal(result[1].blocks[0].tool_call.subagent, undefined);
+  });
+
+  it("returns turns unchanged when no subagent data provided", () => {
+    const clonedTurns = JSON.parse(JSON.stringify(mainTurns));
+    const result = linkSubagents(clonedTurns, []);
+
+    // No subagents should be attached
+    assert.equal(result[0].blocks[0].tool_call.subagent, undefined);
+    assert.equal(result[1].blocks[0].tool_call.subagent, undefined);
+    assert.equal(result[2].blocks[0].tool_call.subagent, undefined);
+  });
+
+  it("skips subagent data with missing toolUseId or turns", () => {
+    const subagentData = [
+      {
+        meta: { toolUseId: "call_abc123", agentType: "conductor:explorer" },
+        // Missing turns
+      },
+      {
+        meta: { /* missing toolUseId */ agentType: "conductor:task-executor" },
+        turns: subagentTurns2
+      }
+    ];
+
+    const clonedTurns = JSON.parse(JSON.stringify(mainTurns));
+    const result = linkSubagents(clonedTurns, subagentData);
+
+    // No subagents should be attached
+    assert.equal(result[0].blocks[0].tool_call.subagent, undefined);
+    assert.equal(result[1].blocks[0].tool_call.subagent, undefined);
   });
 });
