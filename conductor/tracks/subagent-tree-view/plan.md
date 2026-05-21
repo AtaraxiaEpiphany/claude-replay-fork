@@ -2,7 +2,7 @@
 
 ## Phase 1: Exploration & Data Model Extension
 - [~] [Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data <!-- AC-1, TC-1.1 -->
-  - [~] Locate a real Claude Code session directory with subagents, or create synthetic fixtures
+  - [x] Locate a real Claude Code session directory with subagents, or create synthetic fixtures [27d04d1]
   - [ ] Read and document the exact shape of agent-*.meta.json files
   - [ ] Read and document the exact shape of agent-*.jsonl files (confirm isSidechain, agentId fields)
   - [ ] Verify the toolUseId linkage between meta.json and main session tool_use blocks
