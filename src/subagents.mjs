@@ -83,3 +83,51 @@ export async function parseSubagentMeta(metaFilePath) {
     toolUseId: meta.toolUseId
   };
 }
+
+/**
+ * @typedef {import('./formats/shared.mjs').Turn} Turn
+ * @typedef {import('./formats/shared.mjs').ToolCall} ToolCall
+ */
+
+/**
+ * @typedef {Object} SubagentData
+ * @property {{ agentType: string, description: string, toolUseId: string }} meta - Subagent metadata
+ * @property {Turn[]} turns - Parsed subagent session turns
+ */
+
+/**
+ * Attaches parsed subagent turns to matching Agent tool_call blocks in the main session turns.
+ * Links via toolUseId from subagent metadata to tool_call.tool_use_id.
+ *
+ * @param {Turn[]} turns - Main session turns
+ * @param {SubagentData[]} subagentData - Array of subagent metadata and parsed turns
+ * @returns {Turn[]} Modified turns with subagents attached (original array is mutated)
+ */
+export function linkSubagents(turns, subagentData) {
+  // Create a map of toolUseId to subagent turns for fast lookup
+  const subagentMap = new Map();
+  for (const subagent of subagentData) {
+    if (subagent.meta?.toolUseId && subagent.turns) {
+      subagentMap.set(subagent.meta.toolUseId, subagent.turns);
+    }
+  }
+
+  if (subagentMap.size === 0) {
+    return turns;
+  }
+
+  // Iterate through all blocks in all turns to find matching Agent tool calls
+  for (const turn of turns) {
+    for (const block of turn.blocks) {
+      if (block.kind === 'tool_use' && block.tool_call) {
+        const toolCall = block.tool_call;
+        if (subagentMap.has(toolCall.tool_use_id)) {
+          // Attach subagent turns to the tool call
+          toolCall.subagent = subagentMap.get(toolCall.tool_use_id);
+        }
+      }
+    }
+  }
+
+  return turns;
+}
