@@ -37,9 +37,9 @@
   - [x] Add .agent-tree, .agent-node, .agent-children CSS classes with indentation and tree lines [c976e5f]
   - [x] Add parallel layout styles for side-by-side agent trees when multiple agents appear in same turn [c976e5f]
 - [~] Update the renderTurn function in template/player.html to detect Agent tool calls with subagent data and render them as expandable tree nodes instead of standard tool blocks <!-- AC-2, AC-3, TC-2.1, TC-2.2, TC-3.1 -->
-  - [~] Add agent tree rendering: header shows "Agent (type/description)", children show internal tool calls as indented blocks
-  - [ ] Each internal tool call in the tree should be rendered using existing tool block rendering (formatToolBody)
-  - [ ] Ensure Agent tool calls without subagent data fall back to standard tool block rendering
+  - [x] Add agent tree rendering: header shows "Agent (type/description)", children show internal tool calls as indented blocks [8949949]
+  - [x] Each internal tool call in the tree should be rendered using existing tool block rendering (formatToolBody) [8949949]
+  - [x] Ensure Agent tool calls without subagent data fall back to standard tool block rendering [8949949]
 - [ ] Update the tool grouping logic in renderTurn to handle Agent tool calls (which contain sub-tool-calls) correctly within the consecutive tool call grouping <!-- AC-2, TC-2.1 -->
 - [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 5' (Protocol in task-workflow.md)
 
