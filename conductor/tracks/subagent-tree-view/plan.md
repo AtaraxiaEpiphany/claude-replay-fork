@@ -4,7 +4,7 @@
 - [~] [Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data <!-- AC-1, TC-1.1 -->
   - [x] Locate a real Claude Code session directory with subagents, or create synthetic fixtures [27d04d1]
   - [x] Read and document the exact shape of agent-*.meta.json files [193dc2c]
-  - [ ] Read and document the exact shape of agent-*.jsonl files (confirm isSidechain, agentId fields)
+  - [~] Read and document the exact shape of agent-*.jsonl files (confirm isSidechain, agentId fields)
   - [ ] Verify the toolUseId linkage between meta.json and main session tool_use blocks
 - [ ] Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls <!-- AC-1, TC-1.1, TC-1.2 -->
 - [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in task-workflow.md)
