@@ -3,9 +3,9 @@
   "type": "feature",
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
-  "current_phase_index": 4,
+  "current_phase_index": 5,
   "current_task_index": 1,
-  "updated_at": "2026-05-21T16:20:28.491Z",
+  "updated_at": "2026-05-21T16:21:03.322921+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -279,7 +279,7 @@
         },
         {
           "name": "Add comprehensive unit tests for the full pipeline: synthetic Claude Code session with subagents -> parse -> serialize -> verify HTML output contains tree structure",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "name": "Run full test suite (unit + E2E) and verify all existing tests pass with no regressions",
