@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 5,
   "current_task_index": 2,
-  "updated_at": "2026-05-21T16:22:33.207Z",
+  "updated_at": "2026-05-21T16:22:58.184974+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -285,7 +285,7 @@
         },
         {
           "name": "Run full test suite (unit + E2E) and verify all existing tests pass with no regressions",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 6",
