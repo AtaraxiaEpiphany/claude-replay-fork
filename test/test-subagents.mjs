@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { discoverSubagents } from '../src/subagents.mjs';
+import { discoverSubagents, parseSubagentMeta } from '../src/subagents.mjs';
 
 describe('subagent discovery', () => {
   let tempDir;
@@ -128,5 +128,66 @@ describe('subagent discovery', () => {
     // Should not throw, just skip invalid file
     const subagents = await discoverSubagents(mainSessionPath);
     assert.equal(subagents.length, 2); // Only valid ones should be present
+  });
+});
+
+describe('parseSubagentMeta', () => {
+  let tempDir;
+  let metaPath;
+
+  beforeEach(async () => {
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'claude-replay-meta-test-'));
+    metaPath = path.join(tempDir, 'agent-test.meta.json');
+  });
+
+  afterEach(async () => {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  });
+
+  it('should parse valid meta file correctly', async () => {
+    const testMeta = {
+      agentType: 'conductor:explorer',
+      description: 'Explore codebase structure',
+      toolUseId: 'call_abc123def456',
+      extraField: 'should be ignored'
+    };
+    await fs.writeFile(metaPath, JSON.stringify(testMeta));
+
+    const result = await parseSubagentMeta(metaPath);
+    assert.deepEqual(result, {
+      agentType: 'conductor:explorer',
+      description: 'Explore codebase structure',
+      toolUseId: 'call_abc123def456'
+    });
+  });
+
+  it('should handle missing optional fields gracefully', async () => {
+    const minimalMeta = {
+      toolUseId: 'call_abc123'
+    };
+    await fs.writeFile(metaPath, JSON.stringify(minimalMeta));
+
+    const result = await parseSubagentMeta(metaPath);
+    assert.deepEqual(result, {
+      agentType: 'unknown',
+      description: '',
+      toolUseId: 'call_abc123'
+    });
+  });
+
+  it('should throw error for invalid JSON', async () => {
+    await fs.writeFile(metaPath, 'invalid json content');
+
+    await assert.rejects(async () => {
+      await parseSubagentMeta(metaPath);
+    }, /SyntaxError/);
+  });
+
+  it('should throw error for non-existent file', async () => {
+    const nonExistentPath = path.join(tempDir, 'non-existent.meta.json');
+
+    await assert.rejects(async () => {
+      await parseSubagentMeta(nonExistentPath);
+    }, /ENOENT/);
   });
 });
