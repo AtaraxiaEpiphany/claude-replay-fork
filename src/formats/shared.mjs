@@ -4,7 +4,7 @@
  */
 
 /**
- * @typedef {{ tool_use_id: string, name: string, input: object, result: string|null, resultTimestamp: string|null, is_error: boolean }} ToolCall
+ * @typedef {{ tool_use_id: string, name: string, input: object, result: string|null, resultTimestamp: string|null, is_error: boolean, subagent?: ToolCall[] }} ToolCall
  * @typedef {{ kind: string, text: string, tool_call: ToolCall|null, timestamp: string|null }} AssistantBlock
  * @typedef {{ index: number, user_text: string, blocks: AssistantBlock[], timestamp: string }} Turn
  */
