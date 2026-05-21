@@ -2003,7 +2003,12 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
     let toolRun = [];
     for (const block of turn.blocks) {
       if (block.kind === "tool_use" && block.tool_call) {
-        toolRun.push(block);
+        if (block.tool_call.name === "Agent" && block.tool_call.subagent) {
+          if (toolRun.length > 0) { segments.push({ type: "tools", blocks: toolRun }); toolRun = []; }
+          segments.push({ type: "agent", block });
+        } else {
+          toolRun.push(block);
+        }
       } else {
         if (toolRun.length > 0) { segments.push({ type: "tools", blocks: toolRun }); toolRun = []; }
         segments.push({ type: "single", block });
