@@ -1,11 +1,11 @@
 # Implementation Plan: Support Subagent (Agent Tool) Parallel Tree-View Display in HTML Replays
 
 ## Phase 1: Exploration & Data Model Extension
-- [~] [Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data <!-- AC-1, TC-1.1 -->
+- [x] [Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data <!-- AC-1, TC-1.1 --> [0b1c8b6]
   - [x] Locate a real Claude Code session directory with subagents, or create synthetic fixtures [27d04d1]
   - [x] Read and document the exact shape of agent-*.meta.json files [193dc2c]
   - [x] Read and document the exact shape of agent-*.jsonl files (confirm isSidechain, agentId fields) [6aa5c64]
-  - [~] Verify the toolUseId linkage between meta.json and main session tool_use blocks
+  - [x] Verify the toolUseId linkage between meta.json and main session tool_use blocks [0b1c8b6]
 - [ ] Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls <!-- AC-1, TC-1.1, TC-1.2 -->
 - [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in task-workflow.md)
 

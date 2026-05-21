@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 0,
   "current_task_index": 0,
-  "updated_at": "2026-05-21T15:27:23.577878+00:00",
+  "updated_at": "2026-05-21T15:32:16.661669+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -13,7 +13,7 @@
       "tasks": [
         {
           "name": "[Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data",
-          "status": "in_progress",
+          "status": "completed",
           "subtasks": [
             {
               "name": "Locate a real Claude Code session directory with subagents, or create synthetic fixtures",
@@ -35,9 +35,18 @@
             },
             {
               "name": "Verify the toolUseId linkage between meta.json and main session tool_use blocks",
-              "status": "in_progress"
+              "status": "completed",
+              "commit_sha": "0b1c8b6",
+              "completed_at": "2026-05-21T15:32:16.661638+00:00",
+              "evidence": {
+                "coverage_pct": null,
+                "tc_coverage": "",
+                "deviations": 0
+              }
             }
-          ]
+          ],
+          "commit_sha": "0b1c8b6",
+          "completed_at": "2026-05-21T15:32:16.661664+00:00"
         },
         {
           "name": "Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls",
