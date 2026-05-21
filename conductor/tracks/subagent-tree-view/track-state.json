@@ -3,9 +3,9 @@
   "type": "feature",
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
-  "current_phase_index": 3,
-  "current_task_index": 2,
-  "updated_at": "2026-05-21T16:11:28.545271+00:00",
+  "current_phase_index": 4,
+  "current_task_index": 0,
+  "updated_at": "2026-05-21T16:11:57.920422+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -210,11 +210,11 @@
       "tasks": [
         {
           "name": "Add CSS styles for the Agent tree-view in template/player.html: tree node containers, indented child tool blocks, parallel layout for multiple agents",
-          "status": "pending",
+          "status": "in_progress",
           "subtasks": [
             {
               "name": "Add .agent-tree, .agent-node, .agent-children CSS classes with indentation and tree lines",
-              "status": "pending"
+              "status": "in_progress"
             },
             {
               "name": "Add parallel layout styles for side-by-side agent trees when multiple agents appear in same turn",
@@ -273,5 +273,6 @@
       ]
     }
   ],
-  "execution_mode": "continuous"
+  "execution_mode": "continuous",
+  "current_subtask_index": 0
 }
