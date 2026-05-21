@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 2,
-  "current_task_index": 1,
-  "updated_at": "2026-05-21T16:03:03.000873+00:00",
+  "current_task_index": 2,
+  "updated_at": "2026-05-21T16:05:18.929Z",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -156,7 +156,9 @@
         },
         {
           "name": "Add unit tests for CLI integration: verify subagent data flows through to rendered output, verify no-impact on non-Claude-Code formats",
-          "status": "in_progress"
+          "status": "completed",
+          "commit_sha": "016617f",
+          "completed_at": "2026-05-21T16:05:18.929Z"
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 3",
