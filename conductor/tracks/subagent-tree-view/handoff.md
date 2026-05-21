@@ -2,8 +2,8 @@
 
 **Track ID**: subagent-tree_20260521
 **Description**: Support subagent (Agent tool) parallel tree-view display in HTML replays
-**Status**: Phase 1/6 | 32 tasks remaining
-**Updated**: 2026-05-21T15:32:16.673913+00:00
+**Status**: Phase 1/6 | 31 tasks remaining
+**Updated**: 2026-05-21T15:34:55.094318+00:00
 
 ---
 
@@ -11,14 +11,14 @@
 
 | Metric | Value |
 |--------|-------|
-| Completed | 5/37 tasks |
+| Completed | 6/37 tasks |
 | Failed | 0 tasks |
 | Skipped | 0 tasks |
 | Blocked | 0 tasks |
 
 ### Current Focus
 **Phase 1**: Next task
-**Next**: [Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data
+**Next**: Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls
 
 ### Risk Radar
 
@@ -31,7 +31,7 @@
 | # | Task | Details |
 |---|------|---------|
 | 0. | ✅ [Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data | [P0T0](.conductor/handoff/P0T0.md) |
-| 1. | [ ] Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls | [P0T1](.conductor/handoff/P0T1.md) |
+| 1. | ✅ Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls | [P0T1](.conductor/handoff/P0T1.md) |
 | 2. | [ ] [Manual] Task: Conductor - User Manual Verification Phase 1 | [P0T2](.conductor/handoff/P0T2.md) |
 
 ### Phase 2: Phase 2: Subagent Discovery & Parsing ⏸️
