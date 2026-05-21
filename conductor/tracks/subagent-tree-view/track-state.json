@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 2,
-  "current_task_index": 0,
-  "updated_at": "2026-05-21T16:02:36.028Z",
+  "current_task_index": 1,
+  "updated_at": "2026-05-21T16:03:03.000873+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -130,7 +130,7 @@
       "tasks": [
         {
           "name": "Integrate subagent discovery into the CLI build pipeline in bin/claude-replay.mjs so that when a Claude Code session is resolved, subagent files are automatically discovered and parsed",
-          "status": "in_progress",
+          "status": "completed",
           "subtasks": [
             {
               "name": "Add subagent discovery call after parseTranscript in buildReplay function",
@@ -150,11 +150,13 @@
               "commit_sha": "e299aad",
               "completed_at": "2026-05-21T16:02:36.027Z"
             }
-          ]
+          ],
+          "commit_sha": "e299aad",
+          "completed_at": "2026-05-21T16:02:58.149110+00:00"
         },
         {
           "name": "Add unit tests for CLI integration: verify subagent data flows through to rendered output, verify no-impact on non-Claude-Code formats",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 3",
@@ -259,6 +261,5 @@
       ]
     }
   ],
-  "execution_mode": "continuous",
-  "current_subtask_index": null
+  "execution_mode": "continuous"
 }
