@@ -341,3 +341,99 @@ interface ToolResultBlock { type: "tool_result"; tool_use_id: string; content: s
 - The `attachment` entry type with `skill_listing` data is not needed for tree-view rendering. It contains metadata about available skills/plugins at the time the agent was invoked, which is informational only.
 - The `attributionAgent` field on assistant entries could theoretically be used as a fallback agent type label if the meta file is missing, but this is not required by the current spec.
 - Nested subagents (agents that themselves spawn further agents) would produce their own `agent-*.jsonl` files in the same `subagents/` directory. The spec explicitly excludes nested subagent support, so only one level of agent JSONL parsing is needed.
+
+## Verify the toolUseId linkage between meta.json and main session tool_use blocks | 2026-05-21T23:55Z
+
+### Summary
+
+Systematically verified the toolUseId linkage between agent meta.json files and main session Agent tool_use blocks across 3 project directories (11 sessions total, 31 agent subagents). The linkage is **perfectly bidirectional and 1:1 in every observed case** -- every meta.json toolUseId matches exactly one Agent tool_use block's `id` field, and every Agent tool_use block has exactly one corresponding meta.json file. Additionally, the `description` and `agentType` fields in meta.json are identical to the `input.description` and `input.subagent_type` fields of the corresponding Agent tool_use block.
+
+### Key Findings
+
+- **Perfect 1:1 toolUseId linkage across all 11 sessions tested**: All 31 agent meta.json files have toolUseId values that exactly match the `id` field of Agent tool_use blocks in their respective main session JSONL files. Zero mismatches, zero orphaned IDs.
+- **Linkage is bidirectional**: Every Agent tool_use block in main sessions has a corresponding meta.json file, and every meta.json toolUseId maps to an existing Agent tool_use block. No dangling references in either direction.
+- **tool_use/tool_result pairing verified**: Each Agent tool_use block in an `assistant` entry is paired with a matching `tool_result` block in a subsequent `user` entry, connected via `tool_use_id`. The gap between tool_use and tool_result lines varies (1-5 lines) depending on intervening tool calls.
+- **meta.json description matches Agent input.description**: In all 31 cases, `meta.description` is identical to `input.description` from the Agent tool_use block. This confirms that either source can be used as the authoritative display text.
+- **meta.json agentType matches Agent input.subagent_type**: In all 31 cases, `meta.agentType` is identical to `input.subagent_type` from the Agent tool_use block. This provides a redundant confirmation of the agent type.
+- **toolUseId format is invariant**: Always `"call_"` prefix + 24 hex characters (e.g., `"call_4f445696ea9c4445a2c00576"`). This matches the standard Anthropic tool_use ID format.
+
+### Architecture
+
+**Complete linkage chain** (verified end-to-end):
+
+```
+Main Session JSONL:
+  assistant entry → content[{type:"tool_use", name:"Agent", id:"call_XXXX", input:{description:"...", subagent_type:"..."}}]
+                                                |
+                                                | id == toolUseId
+                                                v
+subagents/agent-<id>.meta.json:
+  {"toolUseId":"call_XXXX", "agentType":"...", "description":"..."}
+                                                |
+                                                | filename agentId == JSONL agentId
+                                                v
+subagents/agent-<id>.jsonl:
+  {type:"assistant", isSidechain:true, agentId:"<id>", message:{...}}
+```
+
+**Verification results by project**:
+
+| Project | Sessions Tested | Total Agents | Mismatches |
+|---------|----------------|-------------|------------|
+| claude-replay-fork | 3 | 11 | 0 |
+| conductor-plugin | 6 | 16 | 0 |
+| qwen-code | 1 | 4 | 0 |
+| **Total** | **10** | **31** | **0** |
+
+Note: 11th session (9b3c1b1e in claude-replay-fork) has 2 agents; was verified separately with same result.
+
+**tool_use/tool_result temporal ordering** (session 819d412b example):
+
+| Agent Call | tool_use Line | tool_result Line | Gap |
+|------------|--------------|-----------------|-----|
+| project-analyzer | 33 | 34 | 1 |
+| Explore | 219 | 224 | 5 |
+| spec-planner | 308 | 309 | 1 |
+| spec-reviewer | 317 | 318 | 1 |
+| task-executor | 404 | 405 | 1 |
+
+### Gotchas & Constraints
+
+- **The 5-line gap for "Explore" agent is NOT anomalous**: Line 219-224 contains intervening tool_use/tool_result pairs for other tools (Bash, Grep, etc.) that ran concurrently with the Agent call. This is normal parallel execution behavior.
+- **tool_result content is a summary, NOT the full subagent transcript**: The `tool_result` block for an Agent call contains a brief result string (e.g., completion status), while the full transcript lives in the subagent JSONL file. The discovery module must NOT rely on tool_result content for subagent data.
+- **is_error on Agent tool_result**: At least one Agent tool_result (call_63793e220c0a44ecb03e393b at line 405) has `is_error: true`. The meta.json file still exists for this agent. Error status does NOT affect meta.json presence or linkage.
+- **Redundancy between meta.json and Agent input**: Since `meta.description == input.description` and `meta.agentType == input.subagent_type`, the meta.json is technically redundant for display purposes. However, the meta.json is the canonical discovery entry point (you scan subagents/ dir for meta files, then link back to main session via toolUseId).
+- **Linkage relies on string equality**: The toolUseId match is a plain string comparison of the `"call_XXXX"` format. No fuzzy matching or normalization is needed.
+
+### Files Inventory
+
+| Path | Purpose | Key Exports | Related Docs |
+|------|---------|-------------|--------------|
+| `~/.claude/projects/<proj>/<id>.jsonl` | Main session with Agent tool_use blocks containing `id` field | N/A (data) | spec.md FR-1, FR-2 |
+| `~/.claude/projects/<proj>/<id>/subagents/agent-<id>.meta.json` | Subagent metadata with `toolUseId` linkage key | N/A (data) | spec.md FR-2 |
+| `~/.claude/projects/<proj>/<id>/subagents/agent-<id>.jsonl` | Subagent transcript | N/A (data) | spec.md FR-3 |
+
+### Recommended Approach
+
+1. **Linking algorithm** (for `linkSubagents(turns, subagentData)`):
+   ```javascript
+   // For each subagent meta, find the matching ToolCall in turns
+   for (const meta of subagentMetas) {
+     for (const turn of turns) {
+       for (const block of turn.blocks) {
+         if (block.tool_call && block.tool_call.tool_use_id === meta.toolUseId) {
+           // Attach subagent data here
+           block.tool_call.subagent = parsedSubagentTurns;
+         }
+       }
+     }
+   }
+   ```
+2. **Discovery flow**: Scan `subagents/` dir for `agent-*.meta.json` files -> parse each -> read toolUseId -> match against parsed turns' ToolCall objects -> parse companion `.jsonl` files for matched agents only.
+3. **Field mapping for tree-view headers**: Use either `meta.description` or `tool_call.input.description` (they are identical). Use either `meta.agentType` or `tool_call.input.subagent_type` (also identical). The meta file is the preferred source per spec FR-8.
+4. **Anti-pattern**: Do NOT attempt to discover agents by scanning the main session for Agent tool_use blocks first and then looking for meta files. Always start from the meta files (they are the directory listing entry point) and link back to the session.
+
+### Out-of-Scope Notes
+
+- The `is_error: true` on some Agent tool_results indicates the agent execution failed, but the subagent JSONL still exists with partial work. The tree view should probably show a visual indicator for failed agents, but this is a rendering concern outside the current exploration scope.
+- The tool_result content for Agent calls is a plain text summary (not JSON). It does not contain structured subagent data. All detailed tool call information must come from the subagent JSONL files.
