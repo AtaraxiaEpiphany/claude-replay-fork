@@ -14,7 +14,7 @@
   - [x] Implement discoverSubagents(mainSessionPath) returning array of { agentId, meta, jsonlPath } [e5aff0c]
   - [x] Implement parseSubagentMeta(metaFilePath) returning { agentType, description, toolUseId } [94a2c8f]
   - [x] Implement linkSubagents(turns, subagentData) that attaches parsed subagent tool calls to matching Agent ToolCall blocks [beb5753]
-- [~] Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing <!-- AC-1, AC-4, TC-1.1, TC-1.2, TC-1.3, TC-4.1 -->
+- [x] Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing <!-- AC-1, AC-4, TC-1.1, TC-1.2, TC-1.3, TC-4.1 --> [dc0cd88]
 - [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in task-workflow.md)
 
 ## Phase 3: CLI Integration

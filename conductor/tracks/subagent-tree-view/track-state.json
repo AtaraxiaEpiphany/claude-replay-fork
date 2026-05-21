@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 1,
-  "current_task_index": 1,
-  "updated_at": "2026-05-21T15:45:57.732317+00:00",
+  "current_task_index": 2,
+  "updated_at": "2026-05-21T15:50:28.847Z",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -113,7 +113,9 @@
         },
         {
           "name": "Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing",
-          "status": "in_progress"
+          "status": "completed",
+          "commit_sha": "dc0cd88",
+          "completed_at": "2026-05-21T15:50:28.847Z"
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 2",
