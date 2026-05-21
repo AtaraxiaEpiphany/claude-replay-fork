@@ -3,9 +3,9 @@
   "type": "feature",
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
-  "current_phase_index": 0,
-  "current_task_index": 2,
-  "updated_at": "2026-05-21T15:35:26.324569+00:00",
+  "current_phase_index": 1,
+  "current_task_index": 0,
+  "updated_at": "2026-05-21T15:36:17.683608+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -72,11 +72,11 @@
       "tasks": [
         {
           "name": "Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files",
-          "status": "pending",
+          "status": "in_progress",
           "subtasks": [
             {
               "name": "Implement discoverSubagents(mainSessionPath) returning array of { agentId, meta, jsonlPath }",
-              "status": "pending"
+              "status": "in_progress"
             },
             {
               "name": "Implement parseSubagentMeta(metaFilePath) returning { agentType, description, toolUseId }",
@@ -227,5 +227,6 @@
       ]
     }
   ],
-  "execution_mode": "continuous"
+  "execution_mode": "continuous",
+  "current_subtask_index": 0
 }
