@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 0,
   "current_task_index": 0,
-  "updated_at": "2026-05-21T14:16:28.056413+00:00",
+  "updated_at": "2026-05-21T14:58:47.567600+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -13,11 +13,11 @@
       "tasks": [
         {
           "name": "[Explore] Explore subagent file structure and validate JSONL/meta format assumptions against real Claude Code session data",
-          "status": "pending",
+          "status": "in_progress",
           "subtasks": [
             {
               "name": "Locate a real Claude Code session directory with subagents, or create synthetic fixtures",
-              "status": "pending"
+              "status": "in_progress"
             },
             {
               "name": "Read and document the exact shape of agent-*.meta.json files",
@@ -204,5 +204,6 @@
       ]
     }
   ],
-  "execution_mode": "continuous"
+  "execution_mode": "continuous",
+  "current_subtask_index": 0
 }

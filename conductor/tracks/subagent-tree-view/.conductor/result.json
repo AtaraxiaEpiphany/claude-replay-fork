@@ -1,0 +1,8 @@
+{
+  "status": "success",
+  "commit_sha": "cbc076a",
+  "files_changed": ["src/formats/shared.mjs"],
+  "summary": "Extended ToolCall type with optional subagent field for nested internal tool calls",
+  "tc_coverage": null,
+  "spec_deviation": null
+}
