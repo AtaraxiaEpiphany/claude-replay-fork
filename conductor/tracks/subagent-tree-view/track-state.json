@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 3,
-  "current_task_index": 0,
-  "updated_at": "2026-05-21T16:08:22.651Z",
+  "current_task_index": 1,
+  "updated_at": "2026-05-21T16:08:51.624344+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -173,7 +173,7 @@
       "tasks": [
         {
           "name": "Update turnsToJsonData in src/renderer.mjs to serialize subagent data from ToolCall.subagent into the embedded JSON, preserving the existing compression and embedding pipeline",
-          "status": "in_progress",
+          "status": "completed",
           "subtasks": [
             {
               "name": "Add subagent field serialization to the tool_call block in turnsToJsonData",
@@ -187,11 +187,13 @@
               "commit_sha": "3cd5cc4",
               "completed_at": "2026-05-21T16:08:22.650Z"
             }
-          ]
+          ],
+          "commit_sha": "3cd5cc4",
+          "completed_at": "2026-05-21T16:08:45.901420+00:00"
         },
         {
           "name": "Add unit tests for renderer serialization: verify subagent data appears in serialized turns, verify redaction applies",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 4",
@@ -268,6 +270,5 @@
       ]
     }
   ],
-  "execution_mode": "continuous",
-  "current_subtask_index": null
+  "execution_mode": "continuous"
 }
