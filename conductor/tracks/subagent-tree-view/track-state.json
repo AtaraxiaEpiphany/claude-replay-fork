@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 4,
-  "current_task_index": 0,
-  "updated_at": "2026-05-21T16:13:50.912Z",
+  "current_task_index": 1,
+  "updated_at": "2026-05-21T16:14:16.862001+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -210,7 +210,7 @@
       "tasks": [
         {
           "name": "Add CSS styles for the Agent tree-view in template/player.html: tree node containers, indented child tool blocks, parallel layout for multiple agents",
-          "status": "in_progress",
+          "status": "completed",
           "subtasks": [
             {
               "name": "Add .agent-tree, .agent-node, .agent-children CSS classes with indentation and tree lines",
@@ -224,15 +224,17 @@
               "commit_sha": "c976e5f",
               "completed_at": "2026-05-21T16:13:50.912Z"
             }
-          ]
+          ],
+          "commit_sha": "c976e5f",
+          "completed_at": "2026-05-21T16:14:10.477124+00:00"
         },
         {
           "name": "Update the renderTurn function in template/player.html to detect Agent tool calls with subagent data and render them as expandable tree nodes instead of standard tool blocks",
-          "status": "pending",
+          "status": "in_progress",
           "subtasks": [
             {
               "name": "Add agent tree rendering: header shows Agent (type/description), children show internal tool calls as indented blocks",
-              "status": "pending"
+              "status": "in_progress"
             },
             {
               "name": "Each internal tool call in the tree should be rendered using existing tool block rendering (formatToolBody)",
@@ -278,5 +280,5 @@
     }
   ],
   "execution_mode": "continuous",
-  "current_subtask_index": null
+  "current_subtask_index": 0
 }
