@@ -3,9 +3,9 @@
   "type": "feature",
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
-  "current_phase_index": 2,
-  "current_task_index": 2,
-  "updated_at": "2026-05-21T16:05:47.369930+00:00",
+  "current_phase_index": 3,
+  "current_task_index": 0,
+  "updated_at": "2026-05-21T16:06:14.778730+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -173,11 +173,11 @@
       "tasks": [
         {
           "name": "Update turnsToJsonData in src/renderer.mjs to serialize subagent data from ToolCall.subagent into the embedded JSON, preserving the existing compression and embedding pipeline",
-          "status": "pending",
+          "status": "in_progress",
           "subtasks": [
             {
               "name": "Add subagent field serialization to the tool_call block in turnsToJsonData",
-              "status": "pending"
+              "status": "in_progress"
             },
             {
               "name": "Ensure secret redaction applies to subagent tool call input/result strings",
@@ -264,5 +264,6 @@
       ]
     }
   ],
-  "execution_mode": "continuous"
+  "execution_mode": "continuous",
+  "current_subtask_index": 0
 }
