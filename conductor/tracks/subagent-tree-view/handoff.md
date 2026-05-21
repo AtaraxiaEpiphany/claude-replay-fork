@@ -2,8 +2,8 @@
 
 **Track ID**: subagent-tree_20260521
 **Description**: Support subagent (Agent tool) parallel tree-view display in HTML replays
-**Status**: Phase 1/6 | 31 tasks remaining
-**Updated**: 2026-05-21T15:34:55.094318+00:00
+**Status**: Phase 2/6 | 30 tasks remaining
+**Updated**: 2026-05-21T15:38:55.454379+00:00
 
 ---
 
@@ -11,14 +11,14 @@
 
 | Metric | Value |
 |--------|-------|
-| Completed | 6/37 tasks |
+| Completed | 7/37 tasks |
 | Failed | 0 tasks |
 | Skipped | 0 tasks |
 | Blocked | 0 tasks |
 
 ### Current Focus
-**Phase 1**: Next task
-**Next**: Extend the ToolCall type definition in src/formats/shared.mjs to support an optional subagent field containing parsed internal tool calls
+**Phase 2**: Next task
+**Next**: Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files
 
 ### Risk Radar
 
@@ -38,7 +38,7 @@
 
 | # | Task | Details |
 |---|------|---------|
-| 0. | [ ] Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files | [P1T0](.conductor/handoff/P1T0.md) |
+| 0. | 🔄 Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files | [P1T0](.conductor/handoff/P1T0.md) |
 | 1. | [ ] Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing | [P1T1](.conductor/handoff/P1T1.md) |
 | 2. | [ ] [Manual] Task: Conductor - User Manual Verification Phase 2 | [P1T2](.conductor/handoff/P1T2.md) |
 

@@ -11,7 +11,7 @@
 
 ## Phase 2: Subagent Discovery & Parsing
 - [~] Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files <!-- AC-1, TC-1.1, TC-1.2, TC-1.3 -->
-  - [~] Implement discoverSubagents(mainSessionPath) returning array of { agentId, meta, jsonlPath }
+  - [x] Implement discoverSubagents(mainSessionPath) returning array of { agentId, meta, jsonlPath } [e5aff0c]
   - [ ] Implement parseSubagentMeta(metaFilePath) returning { agentType, description, toolUseId }
   - [ ] Implement linkSubagents(turns, subagentData) that attaches parsed subagent tool calls to matching Agent ToolCall blocks
 - [ ] Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing <!-- AC-1, AC-4, TC-1.1, TC-1.2, TC-1.3, TC-4.1 -->
