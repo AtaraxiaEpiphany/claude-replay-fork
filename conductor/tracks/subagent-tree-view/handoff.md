@@ -2,8 +2,8 @@
 
 **Track ID**: subagent-tree_20260521
 **Description**: Support subagent (Agent tool) parallel tree-view display in HTML replays
-**Status**: Phase 2/6 | 30 tasks remaining
-**Updated**: 2026-05-21T15:38:55.454379+00:00
+**Status**: Phase 2/6 | 29 tasks remaining
+**Updated**: 2026-05-21T15:41:50.406263+00:00
 
 ---
 
@@ -11,7 +11,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Completed | 7/37 tasks |
+| Completed | 8/37 tasks |
 | Failed | 0 tasks |
 | Skipped | 0 tasks |
 | Blocked | 0 tasks |
