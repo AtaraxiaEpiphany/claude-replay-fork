@@ -1,11 +1,11 @@
 {
   "track_id": "subagent-tree_20260521",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
-  "current_phase_index": 5,
-  "current_task_index": 3,
-  "updated_at": "2026-05-21T16:24:47.259723+00:00",
+  "current_phase_index": -1,
+  "current_task_index": -1,
+  "updated_at": "2026-05-21T16:25:26.365744+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -297,5 +297,6 @@
       ]
     }
   ],
-  "execution_mode": "continuous"
+  "execution_mode": "continuous",
+  "quality_score": 87
 }
