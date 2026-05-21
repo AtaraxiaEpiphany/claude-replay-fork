@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 4,
-  "current_task_index": 1,
-  "updated_at": "2026-05-21T16:17:48.207Z",
+  "current_task_index": 2,
+  "updated_at": "2026-05-21T16:18:22.866037+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -230,7 +230,7 @@
         },
         {
           "name": "Update the renderTurn function in template/player.html to detect Agent tool calls with subagent data and render them as expandable tree nodes instead of standard tool blocks",
-          "status": "in_progress",
+          "status": "completed",
           "subtasks": [
             {
               "name": "Add agent tree rendering: header shows Agent (type/description), children show internal tool calls as indented blocks",
@@ -250,11 +250,13 @@
               "commit_sha": "8949949",
               "completed_at": "2026-05-21T16:17:48.206Z"
             }
-          ]
+          ],
+          "commit_sha": "8949949",
+          "completed_at": "2026-05-21T16:18:13.703484+00:00"
         },
         {
           "name": "Update the tool grouping logic in renderTurn to handle Agent tool calls (which contain sub-tool-calls) correctly within the consecutive tool call grouping",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 5",
@@ -285,6 +287,5 @@
       ]
     }
   ],
-  "execution_mode": "continuous",
-  "current_subtask_index": null
+  "execution_mode": "continuous"
 }
