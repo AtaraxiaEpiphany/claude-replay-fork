@@ -4,8 +4,8 @@
   "status": "new",
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 4,
-  "current_task_index": 3,
-  "updated_at": "2026-05-21T16:19:00.041202+00:00",
+  "current_task_index": 1,
+  "updated_at": "2026-05-21T16:20:28.491Z",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -273,7 +273,9 @@
       "tasks": [
         {
           "name": "Update the animateTurn and block reveal logic in template/player.html to handle Agent tree blocks: when an Agent tree node is revealed, all its child tool blocks should be revealed as a single animation unit",
-          "status": "pending"
+          "status": "completed",
+          "commit_sha": "1fb6586",
+          "completed_at": "2026-05-21T16:20:28.491Z"
         },
         {
           "name": "Add comprehensive unit tests for the full pipeline: synthetic Claude Code session with subagents -> parse -> serialize -> verify HTML output contains tree structure",
