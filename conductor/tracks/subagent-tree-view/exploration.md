@@ -98,3 +98,102 @@ Real Claude Code session directories with subagent files have been located at `~
 - **Nested subagents**: Some subagent sessions might themselves spawn further subagents (recursive agents). The spec explicitly excludes nested subagent support. Implementation should ignore any subagent JSONL that contains Agent tool_use blocks pointing to further sub-subagents.
 - **Session without main JSONL**: Session `819d412b` initially appeared to lack a main JSONL file, but it was found at the project level (not inside the session directory). This is a critical path resolution detail for the discovery module.
 - **Non-Claude-Code subagent formats**: The spec explicitly scopes subagent support to Claude Code only. Other formats (Cursor, Codex, Gemini, OpenCode) do not have subagent directory structures.
+
+## Read and document the exact shape of agent-*.meta.json files | 2026-05-21T23:12Z
+
+### Summary
+
+Examined 28 real `agent-*.meta.json` files across 4 project directories under `~/.claude/projects/`. All files conform to an identical, flat 3-field JSON schema with no variation in field names, types, or structure. The format is stable and simple enough for direct `JSON.parse()` consumption.
+
+### Key Findings
+
+- **Schema is invariant across all 28 observed files**: Every single meta file contains exactly 3 keys: `agentType` (string), `description` (string), `toolUseId` (string). No additional fields, no nesting, no nulls.
+- **agentType observed values** (7 unique, in 2 categories):
+  - Built-in Claude Code types: `"claude"`, `"Explore"`
+  - Conductor plugin types (namespaced): `"conductor:explorer"`, `"conductor:project-analyzer"`, `"conductor:spec-planner"`, `"conductor:spec-reviewer"`, `"conductor:task-executor"`
+- **toolUseId format**: Always `"call_"` prefix followed by 24 hex characters, e.g., `"call_4f445696ea9c4445a2c00576"`. This matches the `id` field on `type: "tool_use"` content blocks in the main session JSONL where `name: "Agent"`.
+- **description field**: Free-form human-readable string describing the agent's purpose. Ranges from 3 words ("Efficiency review") to longer phrases ("Review spec/plan for subagent tree view"). Matches the `input.description` field of the corresponding Agent tool_use block in the main session.
+- **File naming**: `agent-<agentId>.meta.json` where `<agentId>` is a 17-character hex string always starting with `a`. Same `<agentId>` appears as `agentId` field in the companion JSONL entries.
+- **Paired files**: Every `agent-<id>.meta.json` has a sibling `agent-<id>.jsonl` in the same directory. No orphaned meta files were observed.
+- **toolUseId linkage is 1:1 verified**: For session `819d412b`, all 5 meta file `toolUseId` values match exactly with 5 Agent tool_use `id` values in the main session JSONL, and vice versa. The linkage is bidirectional and complete.
+
+### Architecture
+
+**Canonical shape** (TypeScript notation):
+```typescript
+interface AgentMetaFile {
+  agentType: string;    // Agent type identifier, e.g., "Explore", "claude", "conductor:explorer"
+  description: string;  // Human-readable task description
+  toolUseId: string;    // Links to tool_use block in main session: "call_" + 24 hex chars
+}
+```
+
+**File location pattern**:
+```
+<project-dir>/<session-id>/subagents/agent-<agentId>.meta.json
+```
+
+**Linkage chain** (confirmed with real data):
+```
+Main session JSONL:
+  content[{type:"tool_use", name:"Agent", id:"call_4f445696ea9c4445a2c00576"}]
+                                                      |
+                                                      v
+agent-a7a843e00d424af42.meta.json:
+  {"toolUseId":"call_4f445696ea9c4445a2c00576", "agentType":"conductor:project-analyzer", ...}
+                                                      |
+                                                      v
+agent-a7a843e00d424af42.jsonl:
+  {agentId:"a7a843e00d424af42", isSidechain:true, ...}
+```
+
+**Sample meta files** (representative examples from different agent types):
+```json
+// Built-in "Explore" type
+{"agentType":"Explore","description":"Explore Agent tool handling","toolUseId":"call_d307ff6e39b84de4990a122c"}
+
+// Built-in "claude" type
+{"agentType":"claude","description":"Code efficiency review","toolUseId":"call_82bbb490f1154b8e90c92983"}
+
+// Conductor plugin explorer type
+{"agentType":"conductor:explorer","description":"Explore agent meta.json format","toolUseId":"call_b9046470995c4cc8a5d70a9b"}
+
+// Conductor plugin task-executor type
+{"agentType":"conductor:task-executor","description":"Execute P0.T0 subagent exploration","toolUseId":"call_63793e220c0a44ecb03e393b"}
+```
+
+### Gotchas & Constraints
+
+- **agentType is NOT an enum -- it is extensible**: The observed values include built-in Claude types (`"Explore"`, `"claude"`) and plugin-namespaced types (`"conductor:explorer"`). Future plugins may introduce new agentType values. Implementation must treat this as a free-form string, not a closed enum.
+- **description field may differ from Agent tool input.description**: While in observed data they match, the meta file `description` and the Agent tool_use `input.description` are stored independently. For tree-node headers, prefer the meta file `description` as the authoritative source (per spec FR-8).
+- **File is single-line JSON**: All observed meta files are a single JSON line with no pretty-printing. No trailing newline variation observed. `JSON.parse(fs.readFileSync(path, 'utf8'))` is the correct read pattern.
+- **No versioning or schema indicator**: The meta file contains no version field. If the format changes in future Claude Code versions, there is no way to detect it from the file contents alone. Defensive parsing (try/catch, field validation) is recommended.
+- **The `a` prefix on agentId**: All observed agent IDs start with `a` and are 17 hex characters long (total with prefix: 18 chars). This is likely an internal Claude Code convention but should not be relied upon for validation -- use the file as the source of truth.
+
+### Files Inventory
+
+| Path | Purpose | Key Exports | Related Docs |
+|------|---------|-------------|--------------|
+| `~/.claude/projects/<proj>/<id>/subagents/agent-<id>.meta.json` | Subagent metadata: type, description, linkage | N/A (data file, 3-field JSON) | spec.md FR-2 |
+| `~/.claude/projects/<proj>/<id>.jsonl` | Main session (contains Agent tool_use blocks with matching `id`) | N/A (data file) | spec.md FR-1, FR-2 |
+
+### Recommended Approach
+
+1. **Parsing**: Use `JSON.parse(fs.readFileSync(metaPath, 'utf8'))` directly. No streaming or line-splitting needed since meta files are single-line JSON.
+2. **Schema validation**: After parsing, validate that all 3 fields exist and are non-empty strings. If any field is missing, treat as malformed and skip the subagent gracefully.
+3. **Type definition for implementation**:
+   ```javascript
+   // In src/subagents.mjs
+   /**
+    * @typedef {Object} AgentMeta
+    * @property {string} agentType - Agent type (e.g., "Explore", "conductor:explorer")
+    * @property {string} description - Human-readable task description
+    * @property {string} toolUseId - Links to main session tool_use block ID
+    */
+   ```
+4. **Discovery pattern**: Scan `subagents/` directory for files matching `agent-*.meta.json` glob, parse each one, then look for sibling `.jsonl` files.
+5. **Anti-pattern**: Do NOT assume the meta file always pairs with a valid JSONL. Always check that the companion `.jsonl` file exists and is non-empty before attempting to parse it (spec TC-1.2).
+
+### Out-of-Scope Notes
+
+- The `agentType` values observed are specific to the user's installed plugins (conductor). Different Claude Code users may have entirely different agentType values. The tree-view rendering should display the agentType as-is, possibly with a label transformation (e.g., strip "conductor:" prefix).
