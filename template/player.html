@@ -1731,7 +1731,13 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
       let blockIdx = 0;
       for (const block of turn.blocks) {
         if (block.kind === "tool_use" && block.tool_call) {
-          toolRun.push(block);
+          // Agent tool calls with subagent data get their own segment
+          if (block.tool_call.name === "Agent" && block.tool_call.subagent) {
+            if (toolRun.length > 0) { segments.push({ type: "tools", blocks: toolRun, blockIdx: blockIdx++ }); toolRun = []; }
+            segments.push({ type: "agent", block, blockIdx: blockIdx++ });
+          } else {
+            toolRun.push(block);
+          }
         } else {
           if (toolRun.length > 0) { segments.push({ type: "tools", blocks: toolRun, blockIdx: blockIdx++ }); toolRun = []; }
           segments.push({ type: "single", block, blockIdx: blockIdx++ });
@@ -1755,6 +1761,52 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
               <div class="thinking-body">${renderMarkdown(block.text)}</div>
             </div></div>`;
           }
+        } else if (seg.type === "agent") {
+          // Agent tool call with subagent data — render as tree
+          const block = seg.block;
+          const tc = block.tool_call;
+          const agentType = tc.input?.subagent_type || "";
+          const agentDesc = tc.input?.description || "";
+          const subagentTurns = tc.subagent || [];
+
+          let childrenHtml = "";
+          for (const subTurn of subagentTurns) {
+            for (const subBlock of subTurn.blocks || []) {
+              if (subBlock.tool_call) {
+                const subTc = subBlock.tool_call;
+                const preview = toolPreview(subTc);
+                const bodyHtml = formatToolBody(subTc);
+                childrenHtml += `<div class="tool-block-wrap"><div class="tool-block" data-type="tool">
+                  <div class="tool-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="tool-indicator${subTc.is_error ? " tool-error" : ""}"></span>
+                    <span class="tool-name">${escapeHtml(subTc.name)}</span>
+                    <span class="tool-args-preview">${escapeHtml(preview)}</span>
+                    <span class="block-spinner"></span>
+                    <span class="tool-chevron">&#9654;</span>
+                  </div>
+                  <div class="tool-body">${bodyHtml}</div>
+                </div></div>`;
+              } else if (subBlock.kind === "text" && subBlock.text) {
+                childrenHtml += `<div class="tool-block-wrap"><div class="assistant-text" style="padding:4px 8px;">${renderMarkdown(subBlock.text)}</div></div>`;
+              }
+            }
+          }
+
+          const resultHtml = tc.result ? `<div class="tool-result" style="border-top:1px solid var(--border);padding:6px 12px;font-size:12px;color:var(--text-dim);">${escapeHtml(truncate(tc.result, 200))}</div>` : "";
+
+          html += `<div class="block-wrapper${hiddenCls}" data-block-idx="${seg.blockIdx}">
+            <div class="agent-tree" data-type="tool" onclick="if(event.target===this.querySelector('.agent-tree-header'))this.classList.toggle('collapsed')">
+              <div class="agent-tree-header">
+                <span class="tool-indicator${tc.is_error ? " tool-error" : ""}"></span>
+                <span class="tool-name">Agent</span>
+                ${agentType ? `<span class="agent-type">${escapeHtml(agentType)}</span>` : ""}
+                ${agentDesc ? `<span class="tool-args-preview">${escapeHtml(agentDesc)}</span>` : ""}
+                <span class="agent-toggle">&#9660;</span>
+              </div>
+              <div class="agent-children">${childrenHtml}</div>
+              ${resultHtml}
+            </div>
+          </div>`;
         } else {
           // Consecutive tool calls
           const toolHtml = seg.blocks.map(block => {

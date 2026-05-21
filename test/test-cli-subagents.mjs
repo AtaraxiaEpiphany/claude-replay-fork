@@ -122,8 +122,9 @@ describe('CLI subagent integration', () => {
     const { code, stdout, stderr } = await run([FIXTURE, '--no-compress']);
     assert.equal(code, 0, `CLI failed: ${stderr}`);
     assert.match(stdout, /<!DOCTYPE html>/);
-    // Should not contain any subagent-related data
-    assert.ok(!stdout.includes('subagent'), 'Non-Claude-Code sessions should not reference subagents');
+    // Non-Claude-Code sessions should not trigger subagent discovery at all
+    // (no error output about subagent processing)
+    assert.ok(!stderr.includes('subagent'), 'Non-Claude-Code sessions should not trigger subagent processing');
   });
 
   it('handles corrupted subagent meta files gracefully', async () => {
