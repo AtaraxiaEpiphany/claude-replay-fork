@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 1,
   "current_task_index": 0,
-  "updated_at": "2026-05-21T15:42:19.613108+00:00",
+  "updated_at": "2026-05-21T15:45:30.502434+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -72,7 +72,7 @@
       "tasks": [
         {
           "name": "Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files",
-          "status": "in_progress",
+          "status": "completed",
           "subtasks": [
             {
               "name": "Implement discoverSubagents(mainSessionPath) returning array of { agentId, meta, jsonlPath }",
@@ -98,9 +98,18 @@
             },
             {
               "name": "Implement linkSubagents(turns, subagentData) that attaches parsed subagent tool calls to matching Agent ToolCall blocks",
-              "status": "in_progress"
+              "status": "completed",
+              "commit_sha": "beb5753",
+              "completed_at": "2026-05-21T15:45:30.502375+00:00",
+              "evidence": {
+                "coverage_pct": 100,
+                "tc_coverage": "TC-1.4, TC-1.3",
+                "deviations": 0
+              }
             }
-          ]
+          ],
+          "commit_sha": "beb5753",
+          "completed_at": "2026-05-21T15:45:30.502429+00:00"
         },
         {
           "name": "Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing",

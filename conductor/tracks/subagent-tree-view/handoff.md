@@ -2,8 +2,8 @@
 
 **Track ID**: subagent-tree_20260521
 **Description**: Support subagent (Agent tool) parallel tree-view display in HTML replays
-**Status**: Phase 2/6 | 29 tasks remaining
-**Updated**: 2026-05-21T15:41:50.406263+00:00
+**Status**: Phase 2/6 | 27 tasks remaining
+**Updated**: 2026-05-21T15:45:30.517697+00:00
 
 ---
 
@@ -11,7 +11,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Completed | 8/37 tasks |
+| Completed | 10/37 tasks |
 | Failed | 0 tasks |
 | Skipped | 0 tasks |
 | Blocked | 0 tasks |
@@ -38,7 +38,7 @@
 
 | # | Task | Details |
 |---|------|---------|
-| 0. | 🔄 Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files | [P1T0](.conductor/handoff/P1T0.md) |
+| 0. | ✅ Create subagent discovery module (src/subagents.mjs) that, given a main session file path, scans the adjacent subagents/ directory for meta and JSONL files | [P1T0](.conductor/handoff/P1T0.md) |
 | 1. | [ ] Add unit tests for subagent discovery: meta parsing, JSONL parsing, toolUseId linking, graceful degradation when files missing | [P1T1](.conductor/handoff/P1T1.md) |
 | 2. | [ ] [Manual] Task: Conductor - User Manual Verification Phase 2 | [P1T2](.conductor/handoff/P1T2.md) |
 
