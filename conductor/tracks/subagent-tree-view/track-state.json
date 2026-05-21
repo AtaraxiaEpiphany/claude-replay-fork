@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 0,
   "current_task_index": 0,
-  "updated_at": "2026-05-21T15:05:24.458349+00:00",
+  "updated_at": "2026-05-21T15:06:01.848592+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -23,7 +23,7 @@
             },
             {
               "name": "Read and document the exact shape of agent-*.meta.json files",
-              "status": "pending"
+              "status": "in_progress"
             },
             {
               "name": "Read and document the exact shape of agent-*.jsonl files (confirm isSidechain, agentId fields)",
@@ -207,5 +207,5 @@
     }
   ],
   "execution_mode": "continuous",
-  "current_subtask_index": 0
+  "current_subtask_index": 1
 }
