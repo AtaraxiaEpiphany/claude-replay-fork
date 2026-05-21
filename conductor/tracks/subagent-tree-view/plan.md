@@ -30,7 +30,7 @@
   - [x] Add subagent field serialization to the tool_call block in turnsToJsonData [3cd5cc4]
   - [x] Ensure secret redaction applies to subagent tool call input/result strings [3cd5cc4]
 - [x] Add unit tests for renderer serialization: verify subagent data appears in serialized turns, verify redaction applies <!-- AC-2, TC-4.2 --> [afd0df0]
-- [ ] [Manual] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in task-workflow.md)
+- [d] [Manual] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in task-workflow.md)
 
 ## Phase 5: HTML Player Tree-View Rendering
 - [ ] Add CSS styles for the Agent tree-view in template/player.html: tree node containers, indented child tool blocks, parallel layout for multiple agents <!-- AC-2, AC-3, TC-2.1, TC-3.1, TC-3.2 -->

@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 3,
   "current_task_index": 2,
-  "updated_at": "2026-05-21T16:10:55.767Z",
+  "updated_at": "2026-05-21T16:11:28.545271+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -199,7 +199,8 @@
         },
         {
           "name": "[Manual] Task: Conductor - User Manual Verification Phase 4",
-          "status": "pending"
+          "status": "deferred",
+          "defer_reason": "Deferred: manual task requires human verification"
         }
       ]
     },
