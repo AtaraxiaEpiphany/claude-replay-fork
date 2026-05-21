@@ -5,7 +5,7 @@
   "description": "Support subagent (Agent tool) parallel tree-view display in HTML replays",
   "current_phase_index": 1,
   "current_task_index": 0,
-  "updated_at": "2026-05-21T15:38:55.439125+00:00",
+  "updated_at": "2026-05-21T15:39:23.401152+00:00",
   "phases": [
     {
       "name": "Phase 1: Exploration & Data Model Extension",
@@ -87,7 +87,7 @@
             },
             {
               "name": "Implement parseSubagentMeta(metaFilePath) returning { agentType, description, toolUseId }",
-              "status": "pending"
+              "status": "in_progress"
             },
             {
               "name": "Implement linkSubagents(turns, subagentData) that attaches parsed subagent tool calls to matching Agent ToolCall blocks",
@@ -235,5 +235,5 @@
     }
   ],
   "execution_mode": "continuous",
-  "current_subtask_index": 0
+  "current_subtask_index": 1
 }
