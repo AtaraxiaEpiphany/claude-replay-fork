@@ -12,6 +12,7 @@ import { parseTranscript, filterTurns, detectFormat, applyPacedTiming } from "./
 import { render } from "./renderer.mjs";
 import { extractData } from "./extract.mjs";
 import { getTheme, listThemes } from "./themes.mjs";
+import { discoverSubagents, linkSubagents } from "./subagents.mjs";
 
 const EDITOR_HTML_PATH = new URL("../template/editor.html", import.meta.url);
 const PKG = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf-8"));
@@ -588,6 +589,21 @@ async function handleApi(req, res, pathname) {
       } else {
         format = detectFormat(filePath);
         turns = parseTranscript(filePath);
+        // Discover and link subagents for Claude Code sessions
+        if (format === "claude-code") {
+          try {
+            const subagents = await discoverSubagents(filePath);
+            if (subagents.length > 0) {
+              const subagentData = await Promise.all(
+                subagents.map(async (subagent) => ({
+                  meta: subagent.meta,
+                  turns: parseTranscript(subagent.jsonlPath),
+                })),
+              );
+              linkSubagents(turns, subagentData);
+            }
+          } catch { /* ignore subagent errors */ }
+        }
       }
       const { id, session, hasEdits } = createSession(turns, filePath, format, sourceBookmarks);
       return json(res, sessionResponse(id, session, hasEdits));
