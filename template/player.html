@@ -1109,6 +1109,48 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
   border-left: none;
 }
 
+.agent-prompt {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  background: var(--tool-bg);
+}
+.agent-prompt-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.agent-prompt-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+  max-height: 200px;
+  overflow-y: auto;
+}
+.agent-result {
+  border-top: 1px solid var(--border);
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.agent-result-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.agent-result-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-dim);
+  max-height: 200px;
+  overflow-y: auto;
+}
+.agent-tree.collapsed .agent-prompt,
+.agent-tree.collapsed .agent-result { display: none; }
+
 /* Parallel agent layout */
 .agent-group {
   display: flex;
@@ -1505,6 +1547,10 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
     if (name === "Bash") {
       return input.command || "";
     }
+    if (name === "Agent") {
+      const desc = input.description || "";
+      return desc.length > 60 ? desc.slice(0, 60) + "..." : desc;
+    }
     return truncate(input, 60);
   }
 
@@ -1565,6 +1611,23 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
         html += `<div class="diff-result${errCls}">${escapeHtml(tc.result)}</div>`;
       }
       return html;
+    }
+
+    // Agent tool — show prompt, subagent_type, description nicely
+    if (name === "Agent") {
+      const prompt = input.prompt || "";
+      const subagentType = input.subagent_type || "";
+      const desc = input.description || "";
+      let agentHtml = '<div class="tool-input"><div class="tool-input-label">Input</div>';
+      if (subagentType) agentHtml += `<div style="margin-bottom:4px"><strong>Type:</strong> ${escapeHtml(subagentType)}</div>`;
+      if (desc) agentHtml += `<div style="margin-bottom:4px"><strong>Description:</strong> ${escapeHtml(desc)}</div>`;
+      if (prompt) agentHtml += `<div style="white-space:pre-wrap;word-break:break-word">${escapeHtml(prompt)}</div>`;
+      agentHtml += "</div>";
+      if (tc.result != null) {
+        const errCls = tc.is_error ? " tool-result-error" : "";
+        agentHtml += `<div class="tool-result${errCls}" data-type="result"><div class="tool-result-label">Result</div>${escapeHtml(tc.result)}</div>`;
+      }
+      return agentHtml;
     }
 
     // Default: generic input + result
@@ -1767,6 +1830,7 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
           const tc = block.tool_call;
           const agentType = tc.input?.subagent_type || "";
           const agentDesc = tc.input?.description || "";
+          const agentPrompt = tc.input?.prompt || "";
           const subagentTurns = tc.subagent || [];
 
           let childrenHtml = "";
@@ -1792,7 +1856,8 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
             }
           }
 
-          const resultHtml = tc.result ? `<div class="tool-result" style="border-top:1px solid var(--border);padding:6px 12px;font-size:12px;color:var(--text-dim);">${escapeHtml(truncate(tc.result, 200))}</div>` : "";
+          const promptHtml = agentPrompt ? `<div class="agent-prompt"><div class="agent-prompt-label">Prompt</div><div class="agent-prompt-text">${escapeHtml(agentPrompt)}</div></div>` : "";
+          const resultHtml = tc.result ? `<div class="agent-result"><div class="agent-result-label">Result</div><div class="agent-result-text">${escapeHtml(tc.result)}</div></div>` : "";
 
           html += `<div class="block-wrapper${hiddenCls}" data-block-idx="${seg.blockIdx}">
             <div class="agent-tree" data-type="tool" onclick="if(event.target===this.querySelector('.agent-tree-header'))this.classList.toggle('collapsed')">
@@ -1803,6 +1868,7 @@ body.in-iframe .more-open-link + hr.more-divider { display: block; }
                 ${agentDesc ? `<span class="tool-args-preview">${escapeHtml(agentDesc)}</span>` : ""}
                 <span class="agent-toggle">&#9660;</span>
               </div>
+              ${promptHtml}
               <div class="agent-children">${childrenHtml}</div>
               ${resultHtml}
             </div>

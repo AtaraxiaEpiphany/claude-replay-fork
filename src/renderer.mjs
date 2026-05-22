@@ -77,6 +77,14 @@ function transformStrings(obj, fn) {
  * @param {import('./parser.mjs').Turn[]} turns
  * @param {{ redact?: boolean, redactRules?: Array<{search: string, replacement: string}> }} options
  */
+function cleanAgentResult(text) {
+  if (!text) return text;
+  return text
+    .replace(/agentId:\s*\S+\s*\(use SendMessage with to:.*?\)\n?/g, '')
+    .replace(/<usage>[\s\S]*?<\/usage>\n?/g, '')
+    .trim();
+}
+
 function turnsToJsonData(turns, { redact = true, redactRules } = {}) {
   const customRedact = buildRedactor(redactRules);
   const scrubText = (text) => customRedact(redact ? redactSecrets(text) : text);
@@ -93,10 +101,13 @@ function turnsToJsonData(turns, { redact = true, redactRules } = {}) {
         };
         if (b.timestamp) block.timestamp = b.timestamp;
         if (b.tool_call) {
+          const rawResult = b.tool_call.name === 'Agent'
+            ? cleanAgentResult(b.tool_call.result)
+            : b.tool_call.result;
           block.tool_call = {
             name: b.tool_call.name,
             input: scrubObj(b.tool_call.input),
-            result: scrubText(b.tool_call.result),
+            result: scrubText(rawResult),
           };
           if (b.tool_call.is_error) {
             block.tool_call.is_error = true;
