@@ -10,16 +10,20 @@ export async function discoverSubagents(mainSessionPath) {
   const subagents = [];
 
   try {
-    // Get the session directory (parent of main session file)
     const sessionDir = path.dirname(mainSessionPath);
-    const subagentsDir = path.join(sessionDir, 'subagents');
+    let subagentsDir = path.join(sessionDir, 'subagents');
 
-    // Check if subagents directory exists
+    // Try adjacent subagents/ first, then <session-id>/subagents/ (Claude Code layout)
     try {
       await fs.access(subagentsDir);
     } catch {
-      // Subagents directory doesn't exist, return empty array
-      return [];
+      const baseName = path.basename(mainSessionPath, '.jsonl');
+      subagentsDir = path.join(sessionDir, baseName, 'subagents');
+      try {
+        await fs.access(subagentsDir);
+      } catch {
+        return [];
+      }
     }
 
     // Read all files in subagents directory
